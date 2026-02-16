@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - LuxeHome{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+                <li class="breadcrumb-item active">About Us</li>
+            </ol>
+        </nav>
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <h1 class="display-5 fw-bold mb-4">About LuxeHome</h1>
+                <p class="lead text-muted">We believe that every home deserves beautiful, quality furniture that combines comfort with timeless design.</p>
+                <p>Founded in 2020, LuxeHome has been dedicated to bringing premium furniture to homes across the country. Our carefully curated collections feature pieces from the finest craftsmen, using sustainable materials and time-tested techniques.</p>
+                <p>From contemporary sofas to classic dining sets, every item in our catalog is selected for its quality, comfort, and aesthetic appeal. We work directly with manufacturers to ensure fair pricing without compromising on quality.</p>
+                <div class="row g-3 mt-4">
+                    <div class="col-4 text-center">
+                        <h3 class="fw-bold text-warning">500+</h3>
+                        <small class="text-muted">Products</small>
+                    </div>
+                    <div class="col-4 text-center">
+                        <h3 class="fw-bold text-warning">10K+</h3>
+                        <small class="text-muted">Happy Customers</small>
+                    </div>
+                    <div class="col-4 text-center">
+                        <h3 class="fw-bold text-warning">5+</h3>
+                        <small class="text-muted">Years Experience</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-light rounded p-5 text-center">
+                    <i class="bi bi-house-heart display-1 text-warning"></i>
+                    <h4 class="mt-3">Making Houses into Homes</h4>
+                    <p class="text-muted">Quality furniture, delivered to your doorstep.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

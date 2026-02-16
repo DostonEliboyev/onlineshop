@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}LuxeHome - Premium Furniture for Modern Living{% endblock %}
+
+{% block content %}
+
+<!-- Banner Slideshow -->
+{% if banners %}
+<section class="banner-section">
+    <div class="swiper banner-swiper">
+        <div class="swiper-wrapper">
+            {% for banner in banners %}
+            <div class="swiper-slide">
+                <div class="banner-slide" style="{% if banner.image %}background-image: url('{{ banner.image.url }}');{% else %}background-color: #2c2c2c;{% endif %}">
+                    <div class="banner-overlay">
+                        <div class="container">
+                            <div class="banner-content text-white">
+                                <h1 class="display-3 fw-bold mb-3 banner-title">{{ banner.title }}</h1>
+                                {% if banner.subtitle %}
+                                <p class="lead mb-4 banner-subtitle">{{ banner.subtitle }}</p>
+                                {% endif %}
+                                <a href="{% if banner.link_url %}{{ banner.link_url }}{% else %}{% url 'products:catalog' %}{% endif %}" class="btn btn-lg btn-warning px-5 py-3 fw-semibold shadow">
+                                    <i class="bi bi-bag me-2"></i>Shop Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+{% else %}
+<section class="hero-section bg-dark text-white py-5">
+    <div class="container text-center py-5">
+        <h1 class="display-3 fw-bold mb-3">Welcome to LuxeHome</h1>
+        <p class="lead mb-4">Premium Furniture for Modern Living</p>
+        <a href="{% url 'products:catalog' %}" class="btn btn-lg btn-warning px-4">Browse Catalog</a>
+    </div>
+</section>
+{% endif %}
+
+<!-- Categories -->
+{% if categories %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4 section-title">Shop by Category</h2>
+        <div class="row g-4">
+            {% for category in categories %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="{% url 'products:catalog' %}?category={{ category.slug }}" class="text-decoration-none">
+                    <div class="card category-card border-0 shadow-sm h-100">
+                        {% if category.image %}
+                        <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}" style="height:180px;object-fit:cover;">
+                        {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:180px;">
+                            <i class="bi bi-grid fs-1 text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div class="card-body text-center">
+                            <h6 class="card-title text-dark mb-0">{{ category.name }}</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Products -->
+{% if featured_products %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4 section-title">Featured Products</h2>
+        <div class="row g-4">
+            {% for product in featured_products %}
+                {% include 'products/_product_card.html' with product=product %}
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'products:catalog' %}" class="btn btn-outline-dark px-4">View All Products</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- New Arrivals -->
+{% if new_arrivals %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4 section-title">New Arrivals</h2>
+        <div class="row g-4">
+            {% for product in new_arrivals %}
+                {% include 'products/_product_card.html' with product=product %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Features Bar -->
+<section class="py-5 bg-dark text-white">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-3 col-6">
+                <i class="bi bi-truck fs-1 text-warning mb-2 d-block"></i>
+                <h6>Free Delivery</h6>
+                <small class="text-secondary">On orders over $500</small>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-shield-check fs-1 text-warning mb-2 d-block"></i>
+                <h6>Quality Guarantee</h6>
+                <small class="text-secondary">Premium materials</small>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-cash-stack fs-1 text-warning mb-2 d-block"></i>
+                <h6>Pay on Delivery</h6>
+                <small class="text-secondary">Cash on delivery</small>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-headset fs-1 text-warning mb-2 d-block"></i>
+                <h6>24/7 Support</h6>
+                <small class="text-secondary">Ready to help</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    new Swiper('.banner-swiper', {
+        loop: true,
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        effect: 'fade',
+        fadeEffect: { crossFade: true }
+    });
+});
+</script>
+{% endblock %}

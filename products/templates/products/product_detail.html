@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - LuxeHome{% endblock %}
+
+{% block content %}
+<section class="py-4">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'products:catalog' %}">Catalog</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'products:catalog' %}?category={{ product.category.slug }}">{{ product.category.name }}</a></li>
+                <li class="breadcrumb-item active">{{ product.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="row g-5">
+            <!-- Image Gallery -->
+            <div class="col-lg-6">
+                {% if product.images.all %}
+                <!-- Main Image -->
+                <div class="swiper detail-swiper mb-3">
+                    <div class="swiper-wrapper">
+                        {% for img in product.images.all %}
+                        <div class="swiper-slide">
+                            <img src="{{ img.image.url }}" class="img-fluid rounded shadow-sm w-100" alt="{{ product.name }}" style="max-height:500px;object-fit:contain;background:#f8f9fa;">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+                <!-- Thumbnails -->
+                {% if product.images.all|length > 1 %}
+                <div class="swiper thumb-swiper">
+                    <div class="swiper-wrapper">
+                        {% for img in product.images.all %}
+                        <div class="swiper-slide">
+                            <img src="{{ img.image.url }}" class="img-fluid rounded cursor-pointer thumb-img" alt="Thumbnail" style="height:80px;width:80px;object-fit:cover;">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height:400px;">
+                    <i class="bi bi-image display-1 text-muted"></i>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-lg-6">
+                <span class="badge bg-secondary mb-2">{{ product.category.name }}</span>
+                <h1 class="mb-3">{{ product.name }}</h1>
+
+                <!-- Price -->
+                <div class="d-flex align-items-center mb-3">
+                    <span class="fs-2 fw-bold text-dark">${{ product.price }}</span>
+                    {% if product.old_price %}
+                    <span class="text-decoration-line-through text-muted ms-3 fs-5">${{ product.old_price }}</span>
+                    <span class="badge bg-danger ms-2">-{{ product.discount_percent }}%</span>
+                    {% endif %}
+                </div>
+
+                <!-- Stock Status -->
+                {% if product.in_stock %}
+                <p class="text-success mb-3"><i class="bi bi-check-circle-fill me-1"></i> In Stock ({{ product.stock }} available)</p>
+                {% else %}
+                <p class="text-danger mb-3"><i class="bi bi-x-circle-fill me-1"></i> Out of Stock</p>
+                {% endif %}
+
+                <!-- Description -->
+                <p class="text-muted mb-4">{{ product.description }}</p>
+
+                <!-- Specifications -->
+                <div class="mb-4">
+                    <h6 class="fw-bold mb-3">Specifications</h6>
+                    <table class="table table-sm">
+                        {% if product.material %}
+                        <tr><td class="text-muted" style="width:40%">Material</td><td>{{ product.get_material_display }}</td></tr>
+                        {% endif %}
+                        {% if product.color %}
+                        <tr><td class="text-muted">Color</td><td>{{ product.get_color_display }}</td></tr>
+                        {% endif %}
+                        {% if product.dimensions %}
+                        <tr><td class="text-muted">Dimensions</td><td>{{ product.dimensions }}</td></tr>
+                        {% endif %}
+                        {% if product.weight %}
+                        <tr><td class="text-muted">Weight</td><td>{{ product.weight }} kg</td></tr>
+                        {% endif %}
+                    </table>
+                </div>
+
+                <!-- Add to Cart -->
+                {% if product.in_stock %}
+                <div class="d-flex gap-3 mb-4">
+                    <div class="input-group" style="width:130px;">
+                        <button class="btn btn-outline-dark" type="button" onclick="changeQty(-1)">-</button>
+                        <input type="number" class="form-control text-center" id="qty-input" value="1" min="1" max="{{ product.stock }}">
+                        <button class="btn btn-outline-dark" type="button" onclick="changeQty(1)">+</button>
+                    </div>
+                    <button class="btn btn-dark flex-grow-1" onclick="addToCart({{ product.pk }}, document.getElementById('qty-input').value)">
+                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                    </button>
+                </div>
+                {% endif %}
+
+                <!-- Favorite -->
+                {% if user.is_authenticated %}
+                <button class="btn {% if is_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} mb-4"
+                        id="detail-fav-btn"
+                        onclick="toggleFavorite({{ product.pk }}, this)">
+                    <i class="bi bi-heart{% if is_favorite %}-fill{% endif %} me-1"></i>
+                    {% if is_favorite %}Remove from Favorites{% else %}Add to Favorites{% endif %}
+                </button>
+                {% endif %}
+
+                <!-- Delivery Info -->
+                <div class="border rounded p-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-truck text-warning fs-5 me-2"></i>
+                        <div>
+                            <strong>Free Delivery</strong>
+                            <small class="text-muted d-block">On orders over $500</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-cash-stack text-warning fs-5 me-2"></i>
+                        <div>
+                            <strong>Pay on Delivery</strong>
+                            <small class="text-muted d-block">Cash on delivery available</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        {% if related_products %}
+        <div class="mt-5 pt-4 border-top">
+            <h3 class="mb-4">Related Products</h3>
+            <div class="row g-4">
+                {% for product in related_products %}
+                    {% include 'products/_product_card.html' with product=product %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const thumbSwiper = new Swiper('.thumb-swiper', {
+        spaceBetween: 10,
+        slidesPerView: 5,
+        freeMode: true,
+        watchSlidesProgress: true,
+    });
+
+    new Swiper('.detail-swiper', {
+        spaceBetween: 10,
+        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        thumbs: { swiper: thumbSwiper },
+    });
+});
+
+function changeQty(delta) {
+    const input = document.getElementById('qty-input');
+    let val = parseInt(input.value) + delta;
+    const max = parseInt(input.max);
+    if (val < 1) val = 1;
+    if (val > max) val = max;
+    input.value = val;
+}
+</script>
+{% endblock %}

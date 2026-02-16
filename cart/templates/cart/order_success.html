@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Confirmed - LuxeHome{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm text-center p-5">
+                    <div class="card-body">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width:100px;height:100px;">
+                            <i class="bi bi-check-circle-fill text-success display-3"></i>
+                        </div>
+                        <h2 class="mb-3">Order Placed Successfully!</h2>
+                        <p class="text-muted mb-4">Thank you for your order. We will process it shortly.</p>
+
+                        <div class="bg-light rounded p-4 text-start mb-4">
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <small class="text-muted">Order Number</small>
+                                    <h5 class="mb-0">#{{ order.pk }}</h5>
+                                </div>
+                                <div class="col-sm-6">
+                                    <small class="text-muted">Status</small>
+                                    <h5 class="mb-0"><span class="badge bg-warning text-dark">{{ order.get_status_display }}</span></h5>
+                                </div>
+                                <div class="col-sm-6">
+                                    <small class="text-muted">Delivery To</small>
+                                    <p class="mb-0">{{ order.full_name }}<br>{{ order.address }}, {{ order.city }}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <small class="text-muted">Total Amount</small>
+                                    <h5 class="mb-0 text-dark">${{ order.total_price }}</h5>
+                                    <small class="text-muted">Pay on Delivery</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Items -->
+                        <div class="text-start mb-4">
+                            <h6 class="mb-3">Order Items</h6>
+                            {% for item in order.items.all %}
+                            <div class="d-flex justify-content-between border-bottom py-2">
+                                <span>{{ item.product_name }} <small class="text-muted">x{{ item.quantity }}</small></span>
+                                <span class="fw-bold">${{ item.subtotal }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-flex gap-3 justify-content-center">
+                            <a href="{% url 'core:home' %}" class="btn btn-dark">Continue Shopping</a>
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'cart:order_history' %}" class="btn btn-outline-dark">View Orders</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

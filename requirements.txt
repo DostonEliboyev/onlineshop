@@ -1,0 +1,4 @@
+django>=5.0,<7.0
+pillow>=10.0
+django-filter>=25.0
+requests>=2.31

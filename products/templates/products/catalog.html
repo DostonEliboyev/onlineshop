@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Catalog - LuxeHome{% endblock %}
+
+{% block content %}
+<section class="py-4">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+                <li class="breadcrumb-item active">Catalog</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <!-- Sidebar Filters -->
+            <div class="col-lg-3 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3"><i class="bi bi-funnel me-2"></i>Filters</h5>
+                        <form method="GET" action="{% url 'products:catalog' %}" id="filter-form">
+                            {% if request.GET.q %}
+                            <input type="hidden" name="q" value="{{ request.GET.q }}">
+                            {% endif %}
+
+                            <!-- Categories -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-2">Category</h6>
+                                <div class="list-group list-group-flush">
+                                    <a href="{% url 'products:catalog' %}{% if request.GET.q %}?q={{ request.GET.q }}{% endif %}"
+                                       class="list-group-item list-group-item-action border-0 px-0 {% if not current_category %}fw-bold text-warning{% endif %}">
+                                        All Categories
+                                    </a>
+                                    {% for cat in categories %}
+                                    <a href="?category={{ cat.slug }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+                                       class="list-group-item list-group-item-action border-0 px-0 {% if current_category == cat.slug %}fw-bold text-warning{% endif %}">
+                                        {{ cat.name }}
+                                    </a>
+                                    {% for child in cat.children.all %}
+                                    <a href="?category={{ child.slug }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+                                       class="list-group-item list-group-item-action border-0 ps-3 {% if current_category == child.slug %}fw-bold text-warning{% endif %}">
+                                        <small>{{ child.name }}</small>
+                                    </a>
+                                    {% endfor %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Price Range -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-2">Price Range</h6>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <input type="number" class="form-control form-control-sm" name="min_price"
+                                               placeholder="Min" value="{{ request.GET.min_price|default:'' }}">
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="number" class="form-control form-control-sm" name="max_price"
+                                               placeholder="Max" value="{{ request.GET.max_price|default:'' }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Material -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-2">Material</h6>
+                                <select class="form-select form-select-sm" name="material">
+                                    <option value="">All Materials</option>
+                                    <option value="wood" {% if request.GET.material == 'wood' %}selected{% endif %}>Wood</option>
+                                    <option value="metal" {% if request.GET.material == 'metal' %}selected{% endif %}>Metal</option>
+                                    <option value="fabric" {% if request.GET.material == 'fabric' %}selected{% endif %}>Fabric</option>
+                                    <option value="leather" {% if request.GET.material == 'leather' %}selected{% endif %}>Leather</option>
+                                    <option value="glass" {% if request.GET.material == 'glass' %}selected{% endif %}>Glass</option>
+                                    <option value="plastic" {% if request.GET.material == 'plastic' %}selected{% endif %}>Plastic</option>
+                                    <option value="marble" {% if request.GET.material == 'marble' %}selected{% endif %}>Marble</option>
+                                    <option value="rattan" {% if request.GET.material == 'rattan' %}selected{% endif %}>Rattan</option>
+                                </select>
+                            </div>
+
+                            <!-- Color -->
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-2">Color</h6>
+                                <select class="form-select form-select-sm" name="color">
+                                    <option value="">All Colors</option>
+                                    <option value="black" {% if request.GET.color == 'black' %}selected{% endif %}>Black</option>
+                                    <option value="white" {% if request.GET.color == 'white' %}selected{% endif %}>White</option>
+                                    <option value="brown" {% if request.GET.color == 'brown' %}selected{% endif %}>Brown</option>
+                                    <option value="grey" {% if request.GET.color == 'grey' %}selected{% endif %}>Grey</option>
+                                    <option value="beige" {% if request.GET.color == 'beige' %}selected{% endif %}>Beige</option>
+                                    <option value="blue" {% if request.GET.color == 'blue' %}selected{% endif %}>Blue</option>
+                                    <option value="green" {% if request.GET.color == 'green' %}selected{% endif %}>Green</option>
+                                    <option value="natural" {% if request.GET.color == 'natural' %}selected{% endif %}>Natural</option>
+                                </select>
+                            </div>
+
+                            {% if current_category %}
+                            <input type="hidden" name="category" value="{{ current_category }}">
+                            {% endif %}
+
+                            <button type="submit" class="btn btn-dark btn-sm w-100 mb-2">Apply Filters</button>
+                            <a href="{% url 'products:catalog' %}" class="btn btn-outline-secondary btn-sm w-100">Clear All</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="col-lg-9">
+                <!-- Sort & Count Bar -->
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <p class="mb-0 text-muted">
+                        <strong>{{ products|length }}</strong> products found
+                        {% if request.GET.q %} for "<strong>{{ request.GET.q }}</strong>"{% endif %}
+                    </p>
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="text-muted small text-nowrap">Sort by:</label>
+                        <select class="form-select form-select-sm" style="width:auto;" onchange="sortProducts(this.value)">
+                            <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Newest</option>
+                            <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                            <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                            <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name: A-Z</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Product Cards -->
+                {% if products %}
+                <div class="row g-4">
+                    {% for product in products %}
+                        {% include 'products/_product_card.html' with product=product %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-search display-1 text-muted"></i>
+                    <h4 class="mt-3">No products found</h4>
+                    <p class="text-muted">Try adjusting your filters or search terms.</p>
+                    <a href="{% url 'products:catalog' %}" class="btn btn-dark">View All Products</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function sortProducts(value) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('sort', value);
+    window.location.href = url.toString();
+}
+</script>
+{% endblock %}

@@ -1,0 +1,337 @@
+/* ========================================
+   LuxeHome Furniture Shop - Custom Styles
+   ======================================== */
+
+:root {
+    --color-primary: #2c2c2c;
+    --color-accent: #c8945a;
+    --color-accent-hover: #b07d48;
+    --color-bg-warm: #faf8f5;
+    --color-text: #333333;
+    --color-text-muted: #7a7a7a;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--color-text);
+    background-color: #ffffff;
+}
+
+/* ---- Navbar ---- */
+.navbar {
+    padding: 0.8rem 0;
+    background-color: var(--color-primary) !important;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.cart-badge {
+    font-size: 0.65rem;
+    padding: 0.25em 0.5em;
+}
+
+/* ---- Banner Section ---- */
+.banner-section {
+    position: relative;
+}
+
+.banner-slide {
+    height: 550px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.banner-overlay {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.05) 70%, transparent 100%);
+}
+
+.banner-content {
+    max-width: 600px;
+}
+
+.banner-title {
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+.banner-subtitle {
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.4);
+}
+
+.banner-swiper .swiper-button-next,
+.banner-swiper .swiper-button-prev {
+    color: #fff;
+}
+
+.banner-swiper .swiper-pagination-bullet {
+    background: #fff;
+    opacity: 0.6;
+}
+
+.banner-swiper .swiper-pagination-bullet-active {
+    opacity: 1;
+    background: var(--color-accent);
+}
+
+@media (max-width: 768px) {
+    .banner-slide {
+        height: 300px;
+    }
+    .banner-content h1 {
+        font-size: 1.75rem !important;
+    }
+}
+
+/* ---- Section Titles ---- */
+.section-title {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--color-accent);
+    border-radius: 2px;
+}
+
+/* Center the section-title in a text-center container */
+.text-center .section-title {
+    display: block;
+}
+
+/* ---- Category Cards ---- */
+.category-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+}
+
+.category-card .card-img-top {
+    transition: transform 0.4s ease;
+}
+
+.category-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* ---- Product Cards ---- */
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+}
+
+.product-card-img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.product-link {
+    transition: color 0.2s;
+}
+
+.product-link:hover {
+    color: var(--color-accent) !important;
+}
+
+.fav-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.fav-btn:hover {
+    transform: scale(1.1);
+}
+
+.add-to-cart-btn {
+    transition: all 0.2s;
+    border-radius: 8px;
+}
+
+.add-to-cart-btn:hover:not(:disabled) {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
+/* ---- Product Detail ---- */
+.detail-swiper {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.thumb-swiper .swiper-slide {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.thumb-swiper .swiper-slide-thumb-active {
+    opacity: 1;
+    border: 2px solid var(--color-accent);
+}
+
+.thumb-img {
+    cursor: pointer;
+}
+
+.detail-swiper .swiper-button-next,
+.detail-swiper .swiper-button-prev {
+    color: var(--color-primary);
+    background: rgba(255,255,255,0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.detail-swiper .swiper-button-next::after,
+.detail-swiper .swiper-button-prev::after {
+    font-size: 18px;
+}
+
+/* ---- Cart & Checkout ---- */
+.table td, .table th {
+    vertical-align: middle;
+}
+
+/* ---- Auth Cards ---- */
+.card {
+    border-radius: 12px;
+}
+
+/* ---- Footer ---- */
+footer a:hover {
+    color: var(--color-accent) !important;
+}
+
+/* ---- Toast Notifications ---- */
+.toast {
+    border-radius: 10px;
+}
+
+/* ---- Breadcrumbs ---- */
+.breadcrumb-item a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    color: var(--color-accent-hover);
+    text-decoration: underline;
+}
+
+/* ---- Hero Section (no banners fallback) ---- */
+.hero-section {
+    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a2e 100%);
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+}
+
+/* ---- Utilities ---- */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Badge on warning buttons */
+.btn-warning {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+}
+
+.btn-warning:hover {
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: #fff;
+}
+
+/* Form controls focus */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.2rem rgba(200, 148, 90, 0.25);
+}
+
+/* Dropdown menu */
+.dropdown-item:active {
+    background-color: var(--color-accent);
+}
+
+/* List group active */
+.list-group-item.active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* Filter sidebar */
+.list-group-item-action:hover {
+    color: var(--color-accent);
+}
+
+/* Loading animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.product-card {
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .product-card-img {
+        height: 160px;
+    }
+
+    .product-card .card-body h6 {
+        font-size: 0.85rem;
+    }
+
+    .product-card .card-body .fs-5 {
+        font-size: 1rem !important;
+    }
+}

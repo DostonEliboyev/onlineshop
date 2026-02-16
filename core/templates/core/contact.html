@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - LuxeHome{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+                <li class="breadcrumb-item active">Contact</li>
+            </ol>
+        </nav>
+        <h1 class="display-5 fw-bold mb-4 text-center">Get in Touch</h1>
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="mb-4">Send us a Message</h5>
+                        <form method="post" action="{% url 'core:contact' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input type="text" class="form-control" id="subject" name="subject" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-dark w-100">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-4">
+                    <h5>Contact Information</h5>
+                    <p class="text-muted">Have a question or need assistance? We're here to help!</p>
+                </div>
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-geo-alt-fill fs-4 text-warning"></i>
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h6>Our Address</h6>
+                        <p class="text-muted mb-0">123 Furniture Avenue, City Center, Country</p>
+                    </div>
+                </div>
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-telephone-fill fs-4 text-warning"></i>
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h6>Phone</h6>
+                        <p class="text-muted mb-0">+1 (555) 123-4567</p>
+                    </div>
+                </div>
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-envelope-fill fs-4 text-warning"></i>
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h6>Email</h6>
+                        <p class="text-muted mb-0">info@luxehome.com</p>
+                    </div>
+                </div>
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-clock-fill fs-4 text-warning"></i>
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h6>Working Hours</h6>
+                        <p class="text-muted mb-0">Mon - Sat: 9:00 AM - 8:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
